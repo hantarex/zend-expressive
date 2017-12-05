@@ -7,7 +7,10 @@ use Auth\AuthenticationServiceFactory;
 use Auth\MyAuthAdapter;
 use Auth\MyAuthAdapterFactory;
 use Zend\Authentication\AuthenticationService;
+use Zend\Form\Form;
+use Zend\Form\FormAbstractServiceFactory;
 use Zend\Mvc\Service\ViewHelperManagerFactory;
+use Zend\View\HelperPluginManager;
 
 // And update the following method:
 
@@ -37,7 +40,7 @@ class ConfigProvider
                 LoginAction::class => LoginActionFactory::class,
                 AuthenticationService::class => AuthenticationServiceFactory::class,
                 MyAuthAdapter::class => MyAuthAdapterFactory::class,
-                'ViewHelperManager' => ViewHelperManagerFactory::class
+                HelperPluginManager::class => ViewHelperManagerFactory::class,
             ],
         ];
     }

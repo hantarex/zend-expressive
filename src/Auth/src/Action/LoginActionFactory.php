@@ -5,6 +5,7 @@ use Auth\MyAuthAdapter;
 use Interop\Container\ContainerInterface;
 use Zend\Authentication\AuthenticationService;
 use Zend\Expressive\Template\TemplateRendererInterface;
+use Zend\View\HelperPluginManager;
 use Zend\View\Renderer\PhpRenderer;
 
 class LoginActionFactory
@@ -15,7 +16,7 @@ class LoginActionFactory
             $container->get(TemplateRendererInterface::class),
             $container->get(AuthenticationService::class),
             $container->get(MyAuthAdapter::class),
-            $container->get('ViewHelperManager')
+            $container->get(HelperPluginManager::class)
         );
     }
 }
