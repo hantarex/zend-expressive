@@ -10,7 +10,9 @@ use Zend\Authentication\AuthenticationService;
 use Zend\Form\Form;
 use Zend\Form\FormAbstractServiceFactory;
 use Zend\Mvc\Service\ViewHelperManagerFactory;
+use Zend\ServiceManager\Factory\InvokableFactory;
 use Zend\View\HelperPluginManager;
+use Zend\View\Renderer\PhpRenderer;
 
 // And update the following method:
 
@@ -41,6 +43,7 @@ class ConfigProvider
                 AuthenticationService::class => AuthenticationServiceFactory::class,
                 MyAuthAdapter::class => MyAuthAdapterFactory::class,
                 HelperPluginManager::class => ViewHelperManagerFactory::class,
+                PhpRenderer::class => InvokableFactory::class
             ],
         ];
     }

@@ -14,7 +14,6 @@ $aggregator = new ConfigAggregator([
     \Zend\Session\ConfigProvider::class,
     \Zend\Router\ConfigProvider::class,
     \Zend\I18n\ConfigProvider::class,
-    \Zend\Form\ConfigProvider::class,
     \Zend\InputFilter\ConfigProvider::class,
     \Zend\Filter\ConfigProvider::class,
     \Zend\Validator\ConfigProvider::class,

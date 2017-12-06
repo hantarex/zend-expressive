@@ -32,12 +32,12 @@ class LoginAction implements MiddlewareInterface
         TemplateRendererInterface $template,
         AuthenticationService $auth,
         MyAuthAdapter $authAdapter,
-        HelperPluginManager $viewHelper
+        PhpRenderer $phpRender
     ) {
         $this->template    = $template;
         $this->auth        = $auth;
         $this->authAdapter = $authAdapter;
-        $this->viewHelper=$viewHelper;
+        $this->phpRender=$phpRender;
     }
 
     public function process(ServerRequestInterface $request, DelegateInterface $delegate)
@@ -46,19 +46,10 @@ class LoginAction implements MiddlewareInterface
         if ($request->getMethod() === 'POST') {
             return $this->authenticate($request);
         }
-        
-        $this->viewHelper=(new HelperConfig())->configureServiceManager($this->viewHelper);
-        $phpRender=new PhpRenderer();
-        $phpRender->setHelperPluginManager($this->viewHelper);
-        $phpRender->setResolver(new TemplatePathStack([
-            'script_paths'=>[
-                __DIR__."/../../"
-            ]
-        ]));
-        
+
         return new HtmlResponse($this->template->render('auth::login', [
             'error' => 'test',
-            'form' =>  $phpRender->partial("templates/mvc/form",['form'=>$form])
+            'form' =>  $this->phpRender->partial("templates/mvc/form",['form'=>$form])
         ]));
     }
 
