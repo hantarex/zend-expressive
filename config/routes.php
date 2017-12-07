@@ -26,6 +26,7 @@
  * );
  */
 
+/** @var \Zend\Expressive\Application $app */
 $app->get('/', App\Action\HomePageAction::class, 'home');
 $app->get('/api/ping', App\Action\PingAction::class, 'api.ping');
 $app->route('/login', Auth\Action\LoginAction::class, ['GET', 'POST'], 'login');
@@ -39,4 +40,6 @@ $app->get('/admin/config', [
     Auth\Action\AuthAction::class,
     App\Action\HomePageAction::class
 ], 'admin.config');
+
+$app->get('/catalog/{url:.+}', Catalog\Action\FindCatalogRoute::class);
 
