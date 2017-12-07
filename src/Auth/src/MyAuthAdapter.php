@@ -43,7 +43,7 @@ class MyAuthAdapter implements AdapterInterface
     {
         $row=[
             'password'=>'1',
-            'user'=>'and'
+            'user'=>'1'
         ];
         // TODO: Implement authenticate() method.
 //        if (password_verify($this->password, $row['password'])) {

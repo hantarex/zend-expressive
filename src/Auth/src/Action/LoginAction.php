@@ -11,14 +11,7 @@ use Zend\Authentication\AuthenticationService;
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Diactoros\Response\RedirectResponse;
 use Zend\Expressive\Template\TemplateRendererInterface;
-use Zend\Form\ConfigProvider;
-use Zend\Form\View\Helper\Form;
-use Zend\Form\View\HelperConfig;
-use Zend\View\HelperPluginManager;
-use Zend\View\Model\ViewModel;
 use Zend\View\Renderer\PhpRenderer;
-use Zend\View\Resolver\TemplatePathStack;
-use Zend\View\View;
 
 class LoginAction implements MiddlewareInterface
 {
@@ -44,7 +37,7 @@ class LoginAction implements MiddlewareInterface
     {
         $form = new AuthForm();
         if ($request->getMethod() === 'POST') {
-            return $this->authenticate($request);
+            return $this->authenticate($request,$form);
         }
 
         return new HtmlResponse($this->template->render('auth::login', [
@@ -53,13 +46,14 @@ class LoginAction implements MiddlewareInterface
         ]));
     }
 
-    public function authenticate(ServerRequestInterface $request)
+    public function authenticate(ServerRequestInterface $request, AuthForm $form)
     {
         $params = $request->getParsedBody();
 
         if (empty($params['username'])) {
             return new HtmlResponse($this->template->render('auth::login', [
                 'error' => 'The username cannot be empty',
+                'form' =>  $this->phpRender->partial("templates/mvc/form",['form'=>$form])
             ]));
         }
 
@@ -67,6 +61,7 @@ class LoginAction implements MiddlewareInterface
             return new HtmlResponse($this->template->render('auth::login', [
                 'username' => $params['username'],
                 'error'    => 'The password cannot be empty',
+                'form' =>  $this->phpRender->partial("templates/mvc/form",['form'=>$form])
             ]));
         }
 
@@ -78,6 +73,7 @@ class LoginAction implements MiddlewareInterface
             return new HtmlResponse($this->template->render('auth::login', [
                 'username' => $params['username'],
                 'error'    => 'The credentials provided are not valid',
+                'form' =>  $this->phpRender->partial("templates/mvc/form",['form'=>$form])
             ]));
         }
 

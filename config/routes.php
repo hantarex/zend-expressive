@@ -30,3 +30,13 @@ $app->get('/', App\Action\HomePageAction::class, 'home');
 $app->get('/api/ping', App\Action\PingAction::class, 'api.ping');
 $app->route('/login', Auth\Action\LoginAction::class, ['GET', 'POST'], 'login');
 
+$app->get('/admin', [
+    Auth\Action\AuthAction::class,
+    App\Action\HomePageAction::class
+], 'admin');
+
+$app->get('/admin/config', [
+    Auth\Action\AuthAction::class,
+    App\Action\HomePageAction::class
+], 'admin.config');
+

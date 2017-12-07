@@ -20,9 +20,10 @@ use Zend\InputFilter\InputFilter;
 
 class AuthForm extends Form
 {
-    const LOGIN = 'login';
+    const LOGIN = 'username';
     const REDIRECT_URL = 'redirect_url';
     const CAPTCHA = 'captcha';
+    const PASSWORD = 'password';
 
     /**
      * AuthForm constructor.
@@ -56,7 +57,7 @@ class AuthForm extends Form
 
         $this->add([
             'type' => Password::class,
-            'name' => 'password',
+            'name' => self::PASSWORD,
             'options' => [
                 'label' => 'Пароль'
             ],
@@ -115,7 +116,7 @@ class AuthForm extends Form
         ]);
 
         $inputFilter->add([
-            'name'=>'password',
+            'name'=> self::PASSWORD,
             'required'=>true,
             'filters'=>[
 

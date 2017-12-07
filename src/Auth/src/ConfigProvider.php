@@ -1,6 +1,8 @@
 <?php
 namespace Auth;
 
+use Auth\Action\AuthAction;
+use Auth\Action\AuthActionFactory;
 use Auth\Action\LoginAction;
 use Auth\Action\LoginActionFactory;
 use Auth\AuthenticationServiceFactory;
@@ -40,6 +42,7 @@ class ConfigProvider
         return [
             'factories' => [
                 LoginAction::class => LoginActionFactory::class,
+                AuthAction::class => AuthActionFactory::class,
                 AuthenticationService::class => AuthenticationServiceFactory::class,
                 MyAuthAdapter::class => MyAuthAdapterFactory::class,
                 HelperPluginManager::class => ViewHelperManagerFactory::class,
