@@ -42,4 +42,5 @@ $app->get('/admin/config', [
 ], 'admin.config');
 
 $app->get('/catalog/{url:.+}', Catalog\Action\FindCatalogRoute::class);
+$app->get('/mongo', \Mongo\Action\TestMongoAction::class);
 
