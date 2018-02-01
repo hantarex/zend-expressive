@@ -76,7 +76,7 @@ class TestMongoAction implements MiddlewareInterface
                 ->field("brands")
                     ->pipeline(
                         $this->db->createAggregationBuilder(Products::class)->group()
-                            ->field('id')
+                            ->field('_id')
                             ->expression(
                                 $builder->expr()
                                     ->field('brand')
@@ -84,6 +84,11 @@ class TestMongoAction implements MiddlewareInterface
                                     ->field('url')
                                     ->expression('$url_code')
                             )
+                            ->field('count')
+                            ->sum(1)
+                        ->group()
+                            ->field('_id')
+                            ->expression('$_id.brand')
                             ->field('count')
                             ->sum(1)
                     );
