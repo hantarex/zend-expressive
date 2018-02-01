@@ -13,10 +13,16 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as ORM;
 
 
 /**
- * @ORM\Document()
+ * @ORM\Document(collection="products")
  */
 class Products
 {
-    /** @Id(strategy="NONE", type="string") */
+    /** @ORM\Id(strategy="NONE", type="string") */
     private $id;
+    
+    /** @ORM\Field(type="string") */
+    private $brand;
+
+    /** @ORM\Field(type="string", name="color_name") */
+    private $color;
 }

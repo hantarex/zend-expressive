@@ -15,6 +15,8 @@ use Helderjs\Component\DoctrineMongoODM\ConfigurationFactory;
 use Helderjs\Component\DoctrineMongoODM\ConnectionFactory;
 use Helderjs\Component\DoctrineMongoODM\DocumentManagerFactory;
 use Helderjs\Component\DoctrineMongoODM\EventManagerFactory;
+use Mongo\Service\Delegators\RegisterAnnotationMongo;
+use Mongo\Service\Delegators\RegisterAnnotationMongoDelegatorFactory;
 use Mongo\Service\MongoDBService;
 use Mongo\Service\MongoDBServiceFactory;
 use Symfony\Component\Console\Input\ArgvInput;
@@ -81,11 +83,16 @@ class ConfigProvider
 //                'doctrine.eventmanager.secondary'            => new EventManagerFactory('odm_secondary'),
 //                'doctrine.documentmandager.secondary'        => new DocumentManagerFactory('odm_secondary'),
                 \Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver::class => \Helderjs\Component\DoctrineMongoODM\AnnotationDriverFactory::class,
-                \Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver::class => \Helderjs\Component\DoctrineMongoODM\AnnotationDriverFactory::class,
-                \Doctrine\ODM\MongoDB\Mapping\Driver\YamlDriver::class => \Helderjs\Component\DoctrineMongoODM\AnnotationDriverFactory::class,
+//                \Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver::class => \Helderjs\Component\DoctrineMongoODM\AnnotationDriverFactory::class,
+//                \Doctrine\ODM\MongoDB\Mapping\Driver\YamlDriver::class => \Helderjs\Component\DoctrineMongoODM\AnnotationDriverFactory::class,
                 MappingDriverChain::class => \Helderjs\Component\DoctrineMongoODM\AnnotationDriverFactory::class,
                 TestMongoAction::class => TestMongoActionFactory::class,
             ],
+            'delegators' => [
+                MappingDriverChain::class => [
+                    RegisterAnnotationMongoDelegatorFactory::class
+                ],
+            ]
         ];
     }
 

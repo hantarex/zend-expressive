@@ -38,24 +38,22 @@ return [
             'odm_default' => [
                 \Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver::class => [
                 ],
-                \Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver::class => [
-                    'simplified' => false,
-                    'xml_dir' => [
-                        '/path/to/files1',
-                        '/path/to/files2',
-                    ]
-                ],
-                \Doctrine\ODM\MongoDB\Mapping\Driver\YamlDriver::class => [
-                    'simplified' => false,
-                    'yml_dir' => [
-                        '/path/to/files1',
-                        '/path/to/files2',
-                    ]
-                ],
+//                \Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver::class => [
+//                    'simplified' => false,
+//                    'xml_dir' => [
+//                        '/path/to/files1',
+//                        '/path/to/files2',
+//                    ]
+//                ],
+//                \Doctrine\ODM\MongoDB\Mapping\Driver\YamlDriver::class => [
+//                    'simplified' => false,
+//                    'yml_dir' => [
+//                        '/path/to/files1',
+//                        '/path/to/files2',
+//                    ]
+//                ],
                 \Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain::class => [
                     'Driver\Annotation' => \Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver::class,
-                    'Driver\Xml' => \Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver::class,
-                    'Driver\Yaml' => \Doctrine\ODM\MongoDB\Mapping\Driver\YamlDriver::class,
                 ],
             ],
         ],
