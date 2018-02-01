@@ -17,16 +17,23 @@ use Mongo\Entity\Products;
 use Mongo\Service\MongoDBService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Zend\Diactoros\Response\HtmlResponse;
+use Zend\Expressive\Template\TemplateRendererInterface;
 
 class TestMongoAction implements MiddlewareInterface
 {
+    protected $template;
+    protected $db;
+
     /**
      * TestMongoAction constructor.
-     * @param MongoDBService $db
+     * @param DocumentManager|MongoDBService $db
+     * @param TemplateRendererInterface $template
      */
-    public function __construct(DocumentManager $db)
+    public function __construct(DocumentManager $db, TemplateRendererInterface $template = null)
     {
         $this->db=$db;
+        $this->template = $template;
     }
 
     /**
@@ -151,9 +158,13 @@ class TestMongoAction implements MiddlewareInterface
                         ->sum(1)
                 )
         ;
-        print_r($builder->execute()->toArray());
+        $data = $builder->execute()->toArray();
+//        print_r($data);
 
-        echo "ok";
+//        echo "ok";
+        return new HtmlResponse($this->template->render('app::test', [
+            'data' => print_r($data,true)
+        ]));
         // TODO: Implement process() method.
     }
 }

@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManager;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Mongo\Service\MongoDBService;
+use Zend\Expressive\Template\TemplateRendererInterface;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\Factory\FactoryInterface;
@@ -38,7 +39,12 @@ class TestMongoActionFactory implements FactoryInterface
 //        $db=$container->get(MongoDBService::class);
 //        return new TestMongoAction($db);
         $db=$container->get(DocumentManager::class);
-        return new TestMongoAction($db);
+
+        $template = $container->has(TemplateRendererInterface::class)
+            ? $container->get(TemplateRendererInterface::class)
+            : null;
+        
+        return new TestMongoAction($db, $template);
         // TODO: Implement __invoke() method.
     }
 }
