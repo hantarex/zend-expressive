@@ -41,7 +41,18 @@ class TestMongoAction implements MiddlewareInterface
     public function process(ServerRequestInterface $request, DelegateInterface $delegate)
     {
 //        var_dump($this->db->getRepository(Products::class));
-        var_dump($this->db->getRepository(Products::class));
+//        var_dump($this->db->getRepository(Products::class)->findBy([
+//            'brand'=>'NIKE'
+//        ]));
+//          var_dump(count($this->db->getRepository(Products::class)->findBy([])));
+//          var_dump($this->db->createQueryBuilder(Products::class)->find()->getQuery()->execute());
+        $resultCursor=$this->db->createQueryBuilder(Products::class)->find()->getQuery()->execute();
+        $i=0;
+        foreach ($resultCursor as $test){
+            var_dump($test);
+            $i++;
+            if($i>10) break;
+        }
         echo "ok";
         // TODO: Implement process() method.
     }
