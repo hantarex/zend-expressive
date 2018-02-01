@@ -9,9 +9,12 @@
 namespace Mongo\Action;
 
 
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ORM\EntityManager;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
+use Mongo\Entity\Products;
+use Mongo\Service\MongoDBService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -19,8 +22,9 @@ class TestMongoAction implements MiddlewareInterface
 {
     /**
      * TestMongoAction constructor.
+     * @param MongoDBService $db
      */
-    public function __construct(EntityManager $db)
+    public function __construct(DocumentManager $db)
     {
         $this->db=$db;
     }
@@ -36,6 +40,8 @@ class TestMongoAction implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate)
     {
+//        var_dump($this->db->getRepository(Products::class));
+        var_dump($this->db->getRepository(Products::class));
         echo "ok";
         // TODO: Implement process() method.
     }

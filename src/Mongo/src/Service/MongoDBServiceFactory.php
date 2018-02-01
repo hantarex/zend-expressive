@@ -2,23 +2,20 @@
 /**
  * Created by PhpStorm.
  * User: ashikov
- * Date: 30.01.2018
- * Time: 16:54
+ * Date: 31.01.2018
+ * Time: 13:39
  */
 
-namespace Mongo\Action;
+namespace Mongo\Service;
 
 
-use Doctrine\ODM\MongoDB\DocumentManager;
-use Doctrine\ORM\EntityManager;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
-use Mongo\Service\MongoDBService;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
-class TestMongoActionFactory implements FactoryInterface
+class MongoDBServiceFactory implements FactoryInterface
 {
 
     /**
@@ -35,10 +32,11 @@ class TestMongoActionFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-//        $db=$container->get(MongoDBService::class);
-//        return new TestMongoAction($db);
-        $db=$container->get(DocumentManager::class);
-        return new TestMongoAction($db);
+        $applicationConfig = $container->has('config') ? $container->get('config') : [];
+        $mongoConfig = array_key_exists('mongo', $applicationConfig) ? $applicationConfig['mongo'] : [];
+        $mongoDB=new MongoDBDriver($mongoConfig);
+        
+        return new MongoDBService($mongoDB->getDatabase());
         // TODO: Implement __invoke() method.
     }
 }

@@ -32,7 +32,9 @@
         "zendframework/zend-expressive-template": "dev-master",
         "doctrine/doctrine-orm-module": ">=1.0.9",
         "alcaeus/mongo-php-adapter": ">=1.1.0",
+        "helderjs/doctrine-mongo-odm": "dev-master",
         "doctrine/mongodb-odm": ">=1.0.9",
+        "doctrine/doctrine-mongo-odm-module": ">=1.0.0",
         "doctrine/mongodb": ">=1.3",
         "doctrine/common": ">=2.1",
         "dasprid/container-interop-doctrine": "dev-master"
