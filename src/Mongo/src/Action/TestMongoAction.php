@@ -46,13 +46,50 @@ class TestMongoAction implements MiddlewareInterface
 //        ]));
 //          var_dump(count($this->db->getRepository(Products::class)->findBy([])));
 //          var_dump($this->db->createQueryBuilder(Products::class)->find()->getQuery()->execute());
-        $resultCursor=$this->db->createQueryBuilder(Products::class)->find()->getQuery()->execute();
-        $i=0;
-        foreach ($resultCursor as $test){
-            var_dump($test);
-            $i++;
-            if($i>10) break;
-        }
+
+//        $resultCursor=$this->db->createQueryBuilder(Products::class)->find()->getQuery()->execute();
+//        var_dump($resultCursor);
+//        $i=0;
+//        foreach ($resultCursor as $test){
+//            var_dump($test);
+//            $i++;
+//            if($i>10) break;
+//        }
+
+        $builder = $this->db->createAggregationBuilder(Products::class);
+        $builder
+            ->match()
+                ->addAnd(
+                    [
+                        "category" => 22690,
+                    ],
+                    $builder->matchExpr()->addOr(
+                        [
+                            "brand"=>"MIZUNO"
+                        ]
+//                        [
+//                            "brand"=>"PUMA"
+//                        ]
+                    )
+                )
+            ->facet()
+                ->field("brands")
+                    ->pipeline(
+                        $this->db->createAggregationBuilder(Products::class)->group()
+                            ->field('id')
+                            ->expression(
+                                $builder->expr()
+                                    ->field('brand')
+                                    ->expression('$brand')
+                                    ->field('url')
+                                    ->expression('$url_code')
+                            )
+                            ->field('count')
+                            ->sum(1)
+                    );
+
+        print_r($builder->execute()->toArray());
+
         echo "ok";
         // TODO: Implement process() method.
     }
