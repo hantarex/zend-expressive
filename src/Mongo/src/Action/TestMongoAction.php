@@ -66,10 +66,10 @@ class TestMongoAction implements MiddlewareInterface
                     $builder->matchExpr()->addOr(
                         [
                             "brand"=>"MIZUNO"
+                        ],
+                        [
+                            "brand"=>"PUMA"
                         ]
-//                        [
-//                            "brand"=>"PUMA"
-//                        ]
                     )
                 )
             ->facet()
@@ -91,8 +91,66 @@ class TestMongoAction implements MiddlewareInterface
                             ->expression('$_id.brand')
                             ->field('count')
                             ->sum(1)
-                    );
-
+                    )
+                ->field("profs")
+                ->pipeline(
+                    $this->db->createAggregationBuilder(Products::class)->group()
+                        ->field('_id')
+                        ->expression(
+                            $builder->expr()
+                                ->field('prof')
+                                ->expression('$prof')
+                                ->field('url')
+                                ->expression('$url_code')
+                        )
+                        ->field('count')
+                        ->sum(1)
+                        ->group()
+                        ->field('_id')
+                        ->expression('$_id.prof')
+                        ->field('count')
+                        ->sum(1)
+                )
+                ->field("size_rus")
+                ->pipeline(
+                    $this->db->createAggregationBuilder(Products::class)->group()
+                        ->field('_id')
+                        ->expression(
+                            $builder->expr()
+                                ->field('size_rus')
+                                ->expression('$size_rus')
+                                ->field('url')
+                                ->expression('$url_code')
+                        )
+                        ->field('count')
+                        ->sum(1)
+                        ->group()
+                        ->field('_id')
+                        ->expression('$_id.size_rus')
+                        ->field('count')
+                        ->sum(1)
+                )
+                ->field("shops")
+                ->pipeline(
+                    $this->db->createAggregationBuilder(Products::class)->unwind('$shop_count')
+                        ->group()
+                        ->field('_id')
+                        ->expression(
+                            $builder->expr()
+                                ->field('shop')
+                                ->expression('$shop_count.shop')
+                                ->field('url')
+                                ->expression('$url_code')
+                        )
+                        ->field('count')
+                        ->sum(1)
+                        ->group()
+                        ->field('_id')
+                        ->expression('$_id.shop')
+                        ->field('count')
+                        ->sum(1)
+                )
+        ;
         print_r($builder->execute()->toArray());
 
         echo "ok";
