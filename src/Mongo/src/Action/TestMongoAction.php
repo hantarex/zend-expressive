@@ -24,16 +24,19 @@ class TestMongoAction implements MiddlewareInterface
 {
     protected $template;
     protected $db;
+    private $mysql;
 
     /**
      * TestMongoAction constructor.
      * @param DocumentManager|MongoDBService $db
+     * @param EntityManager $mysql
      * @param TemplateRendererInterface $template
      */
-    public function __construct(DocumentManager $db, TemplateRendererInterface $template = null)
+    public function __construct(DocumentManager $db, $mysql, TemplateRendererInterface $template = null)
     {
         $this->db=$db;
         $this->template = $template;
+        $this->mysql=$mysql;
     }
 
     /**
@@ -62,6 +65,8 @@ class TestMongoAction implements MiddlewareInterface
 //            $i++;
 //            if($i>10) break;
 //        }
+
+//        var_dump($this->mysql);
 
         $builder = $this->db->createAggregationBuilder(Products::class);
         $builder

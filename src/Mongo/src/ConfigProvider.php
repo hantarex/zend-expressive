@@ -8,9 +8,13 @@ use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\MongoDB\Connection;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Tools\Console\Command;
+use Doctrine\ORM\Configuration;
+use Doctrine\ORM\EntityManager;
 use DoctrineModule\Service as CommonService;
 use DoctrineMongoODMModule\Service as ODMService;
 use DoctrineMongoODMModule\Logging;
+use DoctrineORMModule\Service\DBALConfigurationFactory;
+use DoctrineORMModule\Service\EntityManagerFactory;
 use Helderjs\Component\DoctrineMongoODM\ConfigurationFactory;
 use Helderjs\Component\DoctrineMongoODM\ConnectionFactory;
 use Helderjs\Component\DoctrineMongoODM\DocumentManagerFactory;
@@ -72,16 +76,19 @@ class ConfigProvider
 //        ];
         return [
             'invokables' => [
-                \Doctrine\Common\Cache\ArrayCache::class => \Doctrine\Common\Cache\ArrayCache::class,
+                'doctrine.cache.array' => \Doctrine\Common\Cache\ArrayCache::class,
             ],
             'factories' => [
                 \Doctrine\ODM\MongoDB\Configuration::class => ConfigurationFactory::class,
                 Connection::class => ConnectionFactory::class,
                 EventManager::class => EventManagerFactory::class,
+                'Configuration' => new \DoctrineORMModule\Service\ConfigurationFactory('mysql_master'),
+                EntityManager::class => new EntityManagerFactory('mysql_master'),
                 \Doctrine\ODM\MongoDB\DocumentManager::class => DocumentManagerFactory::class,
 //                'doctrine.connection.secondary'              => new ConnectionFactory('odm_secondary'),
 //                'doctrine.eventmanager.secondary'            => new EventManagerFactory('odm_secondary'),
 //                'doctrine.documentmandager.secondary'        => new DocumentManagerFactory('odm_secondary'),
+                \Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver::class => \Helderjs\Component\DoctrineMongoODM\AnnotationDriverFactory::class,
                 \Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver::class => \Helderjs\Component\DoctrineMongoODM\AnnotationDriverFactory::class,
 //                \Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver::class => \Helderjs\Component\DoctrineMongoODM\AnnotationDriverFactory::class,
 //                \Doctrine\ODM\MongoDB\Mapping\Driver\YamlDriver::class => \Helderjs\Component\DoctrineMongoODM\AnnotationDriverFactory::class,

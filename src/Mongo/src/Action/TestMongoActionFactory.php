@@ -39,12 +39,13 @@ class TestMongoActionFactory implements FactoryInterface
 //        $db=$container->get(MongoDBService::class);
 //        return new TestMongoAction($db);
         $db=$container->get(DocumentManager::class);
-
+//        $mysql=$container->get(EntityManager::class);
+        $mysql=null;
         $template = $container->has(TemplateRendererInterface::class)
             ? $container->get(TemplateRendererInterface::class)
             : null;
         
-        return new TestMongoAction($db, $template);
+        return new TestMongoAction($db, $mysql, $template);
         // TODO: Implement __invoke() method.
     }
 }
