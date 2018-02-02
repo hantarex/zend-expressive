@@ -38,15 +38,15 @@ class TestMongoActionFactory implements FactoryInterface
     {
 //        $db=$container->get(MongoDBService::class);
 //        return new TestMongoAction($db);
-        $db=$container->get('doctrine.documentmanager.odm_default');
+        $mongoDB=$container->get('doctrine.documentmanager.odm_default');
         $mysql=$container->get('doctrine.entitymanager.mysql_master');
 //        $mysql=null;
-//        $db = null;
+//        $mongoDB = null;
         $template = $container->has(TemplateRendererInterface::class)
             ? $container->get(TemplateRendererInterface::class)
             : null;
         
-        return new TestMongoAction($db, $mysql, $template);
+        return new TestMongoAction($mongoDB, $mysql, $template);
         // TODO: Implement __invoke() method.
     }
 }

@@ -1,8 +1,7 @@
 <?php
 
-namespace Banners\Entity;
+namespace Mongo\Entity;
 
-use Banners\Form\AddBanner;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -71,16 +70,6 @@ class BannersEntity
         return $this->id;
     }
 
-    public function dataForm()
-    {
-        $array=[
-            AddBanner::BANNER_TYPE => $this->getType(),
-            AddBanner::BANNER_LINK => $this->getLink(),
-            AddBanner::BANNER_IMAGE => $this->getImg(),
-            AddBanner::BANNER_TITLE => $this->getTitle(),
-        ];
-        return $array;
-    }
 
     /**
      * @return mixed

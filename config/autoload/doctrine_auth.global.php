@@ -49,7 +49,7 @@ return [
                     // Map of driver names to be used within this driver chain, indexed by
                     // entity namespace
                     'drivers' => [
-                        'banners_entity'
+                        'Mongo' => 'banners_entity',
                     ],
             )
         ],

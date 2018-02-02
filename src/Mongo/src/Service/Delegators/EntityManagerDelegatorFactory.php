@@ -9,6 +9,7 @@
 namespace Mongo\Service\Delegators;
 
 
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
@@ -16,7 +17,7 @@ use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\Factory\DelegatorFactoryInterface;
 
-class RegisterAnnotationMongoDelegatorFactory implements DelegatorFactoryInterface
+class EntityManagerDelegatorFactory implements DelegatorFactoryInterface
 {
 
     /**
@@ -35,8 +36,11 @@ class RegisterAnnotationMongoDelegatorFactory implements DelegatorFactoryInterfa
     public function __invoke(ContainerInterface $container, $name, callable $callback, array $options = null)
     {
         /** @var AnnotationDriver $annotationDriver */
-        $annotationDriver=$container->get(AnnotationDriver::class);
-        $annotationDriver->registerAnnotationClasses();
+        AnnotationRegistry::registerLoader(
+            function ($className) {
+                return class_exists($className);
+            }
+        );
         return $callback();
         // TODO: Implement __invoke() method.
     }

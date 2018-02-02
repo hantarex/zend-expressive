@@ -13,6 +13,7 @@ use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ORM\EntityManager;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
+use Mongo\Entity\BannersEntity;
 use Mongo\Entity\Products;
 use Mongo\Service\MongoDBService;
 use Psr\Http\Message\ResponseInterface;
@@ -32,7 +33,7 @@ class TestMongoAction implements MiddlewareInterface
      * @param EntityManager $mysql
      * @param TemplateRendererInterface|null $template
      */
-    public function __construct(DocumentManager $mongoDB, EntityManager $mysql, TemplateRendererInterface $template = null)
+    public function __construct($mongoDB, $mysql, TemplateRendererInterface $template = null)
     {
         $this->mongoDB=$mongoDB;
         $this->template = $template;
@@ -65,6 +66,8 @@ class TestMongoAction implements MiddlewareInterface
 //            $i++;
 //            if($i>10) break;
 //        }
+
+        $banner=$this->mysql->getRepository(BannersEntity::class)->find(1);
 
 
         $builder = $this->mongoDB->createAggregationBuilder(Products::class);
@@ -167,7 +170,8 @@ class TestMongoAction implements MiddlewareInterface
 
 //        echo "ok";
         return new HtmlResponse($this->template->render('app::test', [
-            'data' => print_r($data,true)
+            'data_mongo' => print_r($data,true),
+            'data_mysql' => print_r($banner,true),
         ]));
         // TODO: Implement process() method.
     }

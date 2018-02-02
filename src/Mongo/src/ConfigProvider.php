@@ -2,8 +2,11 @@
 
 namespace Mongo;
 
+use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ODM\MongoDB\Tools\Console\Command;
+use Doctrine\ORM\Configuration;
+use Doctrine\ORM\EntityManager;
 use DoctrineModule\Service as CommonService;
 use DoctrineMongoODMModule\Service as ODMService;
 use DoctrineMongoODMModule\Logging;
@@ -14,6 +17,7 @@ use Helderjs\Component\DoctrineMongoODM\ConfigurationFactory;
 use Helderjs\Component\DoctrineMongoODM\ConnectionFactory;
 use Helderjs\Component\DoctrineMongoODM\DocumentManagerFactory;
 use Helderjs\Component\DoctrineMongoODM\EventManagerFactory;
+use Mongo\Service\Delegators\EntityManagerDelegatorFactory;
 use Mongo\Service\Delegators\RegisterAnnotationMongoDelegatorFactory;
 use Mongo\Action\TestMongoAction;
 use Mongo\Action\TestMongoActionFactory;
@@ -85,9 +89,12 @@ class ConfigProvider
                 TestMongoAction::class => TestMongoActionFactory::class,
             ],
             'delegators' => [
-                'doctrine.driver.odm_default' => [
+                MappingDriverChain::class => [
                     RegisterAnnotationMongoDelegatorFactory::class
                 ],
+                'doctrine.driver.mysql_master' => [
+                    EntityManagerDelegatorFactory::class
+                ]
             ],
         ];
     }
