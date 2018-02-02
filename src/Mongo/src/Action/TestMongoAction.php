@@ -23,18 +23,18 @@ use Zend\Expressive\Template\TemplateRendererInterface;
 class TestMongoAction implements MiddlewareInterface
 {
     protected $template;
-    protected $db;
+    protected $mongoDB;
     private $mysql;
 
     /**
      * TestMongoAction constructor.
-     * @param DocumentManager|MongoDBService $db
+     * @param DocumentManager $mongoDB
      * @param EntityManager $mysql
-     * @param TemplateRendererInterface $template
+     * @param TemplateRendererInterface|null $template
      */
-    public function __construct(DocumentManager $db, $mysql, TemplateRendererInterface $template = null)
+    public function __construct(DocumentManager $mongoDB, EntityManager $mysql, TemplateRendererInterface $template = null)
     {
-        $this->db=$db;
+        $this->mongoDB=$mongoDB;
         $this->template = $template;
         $this->mysql=$mysql;
     }
@@ -66,9 +66,8 @@ class TestMongoAction implements MiddlewareInterface
 //            if($i>10) break;
 //        }
 
-//        var_dump($this->mysql);
 
-        $builder = $this->db->createAggregationBuilder(Products::class);
+        $builder = $this->mongoDB->createAggregationBuilder(Products::class);
         $builder
             ->match()
                 ->addAnd(
@@ -87,7 +86,7 @@ class TestMongoAction implements MiddlewareInterface
             ->facet()
                 ->field("brands")
                     ->pipeline(
-                        $this->db->createAggregationBuilder(Products::class)->group()
+                        $this->mongoDB->createAggregationBuilder(Products::class)->group()
                             ->field('_id')
                             ->expression(
                                 $builder->expr()
@@ -106,7 +105,7 @@ class TestMongoAction implements MiddlewareInterface
                     )
                 ->field("profs")
                 ->pipeline(
-                    $this->db->createAggregationBuilder(Products::class)->group()
+                    $this->mongoDB->createAggregationBuilder(Products::class)->group()
                         ->field('_id')
                         ->expression(
                             $builder->expr()
@@ -125,7 +124,7 @@ class TestMongoAction implements MiddlewareInterface
                 )
                 ->field("size_rus")
                 ->pipeline(
-                    $this->db->createAggregationBuilder(Products::class)->group()
+                    $this->mongoDB->createAggregationBuilder(Products::class)->group()
                         ->field('_id')
                         ->expression(
                             $builder->expr()
@@ -144,7 +143,7 @@ class TestMongoAction implements MiddlewareInterface
                 )
                 ->field("shops")
                 ->pipeline(
-                    $this->db->createAggregationBuilder(Products::class)->unwind('$shop_count')
+                    $this->mongoDB->createAggregationBuilder(Products::class)->unwind('$shop_count')
                         ->group()
                         ->field('_id')
                         ->expression(

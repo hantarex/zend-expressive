@@ -38,9 +38,10 @@ class TestMongoActionFactory implements FactoryInterface
     {
 //        $db=$container->get(MongoDBService::class);
 //        return new TestMongoAction($db);
-        $db=$container->get(DocumentManager::class);
-//        $mysql=$container->get(EntityManager::class);
-        $mysql=null;
+        $db=$container->get('doctrine.documentmanager.odm_default');
+        $mysql=$container->get('doctrine.entitymanager.mysql_master');
+//        $mysql=null;
+//        $db = null;
         $template = $container->has(TemplateRendererInterface::class)
             ? $container->get(TemplateRendererInterface::class)
             : null;

@@ -2,38 +2,19 @@
 
 namespace Mongo;
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
-use Doctrine\Common\EventManager;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
-use Doctrine\MongoDB\Connection;
-use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Tools\Console\Command;
-use Doctrine\ORM\Configuration;
-use Doctrine\ORM\EntityManager;
 use DoctrineModule\Service as CommonService;
 use DoctrineMongoODMModule\Service as ODMService;
 use DoctrineMongoODMModule\Logging;
-use DoctrineORMModule\Service\DBALConfigurationFactory;
+use DoctrineORMModule\Service\DBALConnectionFactory;
 use DoctrineORMModule\Service\EntityManagerFactory;
+use DoctrineORMModule\Service\EntityResolverFactory;
 use Helderjs\Component\DoctrineMongoODM\ConfigurationFactory;
 use Helderjs\Component\DoctrineMongoODM\ConnectionFactory;
 use Helderjs\Component\DoctrineMongoODM\DocumentManagerFactory;
 use Helderjs\Component\DoctrineMongoODM\EventManagerFactory;
-use Mongo\Service\Delegators\RegisterAnnotationMongo;
 use Mongo\Service\Delegators\RegisterAnnotationMongoDelegatorFactory;
-use Mongo\Service\MongoDBService;
-use Mongo\Service\MongoDBServiceFactory;
-use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Input\InputOption;
-use Zend\EventManager\EventInterface;
-use Zend\ModuleManager\Feature\BootstrapListenerInterface;
-use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
-use Zend\ModuleManager\Feature\ConfigProviderInterface;
-use Zend\ModuleManager\Feature\ServiceProviderInterface;
-use Zend\ModuleManager\Feature\InitProviderInterface;
-use Zend\ModuleManager\ModuleManagerInterface;
-use Zend\Loader\AutoloaderFactory;
-use Zend\Loader\StandardAutoloader;
 use Mongo\Action\TestMongoAction;
 use Mongo\Action\TestMongoActionFactory;
 
@@ -76,30 +57,38 @@ class ConfigProvider
 //        ];
         return [
             'invokables' => [
-                'doctrine.cache.array' => \Doctrine\Common\Cache\ArrayCache::class,
+                'doctrine.odm_default.cache' => \Doctrine\Common\Cache\ArrayCache::class,
+            ],
+            'aliases' => [
+                'Configuration' => 'config',
             ],
             'factories' => [
-                \Doctrine\ODM\MongoDB\Configuration::class => ConfigurationFactory::class,
-                Connection::class => ConnectionFactory::class,
-                EventManager::class => EventManagerFactory::class,
-                'Configuration' => new \DoctrineORMModule\Service\ConfigurationFactory('mysql_master'),
-                EntityManager::class => new EntityManagerFactory('mysql_master'),
-                \Doctrine\ODM\MongoDB\DocumentManager::class => DocumentManagerFactory::class,
-//                'doctrine.connection.secondary'              => new ConnectionFactory('odm_secondary'),
-//                'doctrine.eventmanager.secondary'            => new EventManagerFactory('odm_secondary'),
-//                'doctrine.documentmandager.secondary'        => new DocumentManagerFactory('odm_secondary'),
-                \Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver::class => \Helderjs\Component\DoctrineMongoODM\AnnotationDriverFactory::class,
+                'doctrine.cli' => 'DoctrineModule\Service\CliFactory',
+                'doctrine.configuration.odm_default' => new ConfigurationFactory('odm_default'),
+                'doctrine.connection.odm_default' => new ConnectionFactory('odm_default'),
+                'doctrine.eventmanager.odm_default' => new EventManagerFactory('odm_default'),
+                'doctrine.documentmanager.odm_default' => DocumentManagerFactory::class,
                 \Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver::class => \Helderjs\Component\DoctrineMongoODM\AnnotationDriverFactory::class,
 //                \Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver::class => \Helderjs\Component\DoctrineMongoODM\AnnotationDriverFactory::class,
 //                \Doctrine\ODM\MongoDB\Mapping\Driver\YamlDriver::class => \Helderjs\Component\DoctrineMongoODM\AnnotationDriverFactory::class,
+                'doctrine.driver.odm_default' => new \Helderjs\Component\DoctrineMongoODM\AnnotationDriverFactory('odm_default'),
                 MappingDriverChain::class => \Helderjs\Component\DoctrineMongoODM\AnnotationDriverFactory::class,
+
+                'doctrine.connection.mysql_master' => new DBALConnectionFactory('mysql_master'),
+                'doctrine.entitymanager.mysql_master' => new EntityManagerFactory('mysql_master'),
+                'doctrine.configuration.mysql_master' => new \DoctrineORMModule\Service\ConfigurationFactory('mysql_master'),
+                'doctrine.eventmanager.mysql_master' => new CommonService\EventManagerFactory('mysql_master'),
+                'doctrine.entity_resolver.mysql_master' => new EntityResolverFactory('mysql_master'),
+                'doctrine.driver.mysql_master' => new CommonService\DriverFactory('mysql_master'),
+                'doctrine.cache.array' => new CommonService\CacheFactory('array'),
+
                 TestMongoAction::class => TestMongoActionFactory::class,
             ],
             'delegators' => [
-                MappingDriverChain::class => [
+                'doctrine.driver.odm_default' => [
                     RegisterAnnotationMongoDelegatorFactory::class
                 ],
-            ]
+            ],
         ];
     }
 
